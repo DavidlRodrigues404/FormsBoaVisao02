@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Uma Boa Visão Transforma Vidas Bariri - SP</title>
+
+    <!-- Metadados -->
+    <meta property="og:title" content="Cadastro - Uma Boa Visão Transforma Vidas Bariri - SP">
+    <meta property="og:description"
+        content="Agendamento gratuito para atendimento oftalmológico em Bariri - SP. Vagas limitadas para 28/02/2026!">
+    <meta name="theme-color" content="#0d6efd">
+    <link rel="shortcut icon" href="logo.png" type="image/png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="container">
+        <div class="header">
+            <img src="logo.png" alt="Logo" class="logo-img"
+                onerror="this.style.display='none'; document.getElementById('placeholder-logo').style.display='inline-flex'">
+            <div id="placeholder-logo" class="logo-placeholder" style="display:none">👁️</div>
+
+            <h2>Ficha de Cadastro</h2>
+            <div class="subtitle">UMA BOA VISÃO TRANSFORMA VIDAS<br>BARIRI - SP</div>
+        </div>
+
+        <form name="submit-to-google-sheet" id="formCadastro" autocomplete="off">
+            <h3>Dados do Paciente</h3>
+            <div class="form-group"><label>Nome Completo *</label><input type="text" name="nome" id="nome"
+                    placeholder="Digite o nome completo" required></div>
+
+            <div class="row">
+                <div class="col form-group">
+                    <label>CPF *</label>
+                    <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" maxlength="14"
+                        inputmode="numeric" required>
+                    <div id="cpfError" class="error-msg" style="display:none;">Este CPF já possui cadastro!</div>
+                </div>
+                <div class="col form-group"><label>RG (Opcional)</label><input type="tel" name="rg" id="rg"
+                        placeholder="Apenas números" inputmode="numeric"></div>
+            </div>
+
+            <div class="row">
+                <div class="col form-group"><label>Data de Nascimento *</label><input type="date" name="nascimento"
+                        id="nascimento" required>
+                    <div id="msgIdade" class="error-msg"></div>
+                </div>
+                <div class="col form-group" style="max-width: 100px;"><label>Idade</label><input type="text"
+                        name="idade" id="idade" readonly style="text-align: center; font-weight: bold;"></div>
+            </div>
+
+            <h3>Endereço</h3>
+            <div class="row">
+                <div class="col form-group"><label>Estado (UF) *</label><select name="estado" id="estado" required>
+                        <option value="">Carregando...</option>
+                    </select></div>
+                <div class="col form-group"><label>Cidade *</label><select name="cidade" id="cidade" disabled required>
+                        <option value="">Selecione UF primeiro</option>
+                    </select></div>
+            </div>
+
+            <h3>Contato</h3>
+            <div class="form-group"><label>Celular / WhatsApp *</label><input type="tel" name="whatsapp" id="whatsapp"
+                    placeholder="(DDD) 90000-0000" maxlength="15" required></div>
+            <div class="form-group"><label>E-mail (Opcional)</label><input type="email" name="email"
+                    placeholder="exemplo@email.com"></div>
+
+            <h3>Agendamento (28/02/2026)</h3>
+            <p id="status-vagas"
+                style="color: var(--primary); font-size: 0.9rem; display: flex; align-items: center; gap: 5px;"><span
+                    class="spinner-sm"></span> Verificando vagas...</p>
+
+            <!-- OPÇÃO 1: MANHÃ -->
+            <label class="agenda-option" id="opt-1" onclick="selectOption('1')">
+                <input type="radio" name="agendamento" value="Sábado 28/02 - Manhã" required>
+                <div class="agenda-content">
+                    <div class="agenda-date">Manhã (Sábado 28/02)</div>
+                    <div class="vagas" id="vagas-1"><span class="spinner-sm"></span></div>
+                </div>
+            </label>
+
+            <!-- OPÇÃO 2: TARDE -->
+            <label class="agenda-option" id="opt-2" onclick="selectOption('2')">
+                <input type="radio" name="agendamento" value="Sábado 28/02 - Tarde">
+                <div class="agenda-content">
+                    <div class="agenda-date">Tarde (Sábado 28/02)</div>
+                    <div class="vagas" id="vagas-2"><span class="spinner-sm"></span></div>
+                </div>
+            </label>
+
+            <!-- CONSENTIMENTO WHATSAPP -->
+            <label class="terms-wrapper">
+                <input type="checkbox" name="termos" required>
+                <span class="terms-text">
+                    Declaro que li e concordo em receber o contato da equipe via <strong>WhatsApp</strong> para a
+                    confirmação do agendamento.
+                </span>
+            </label>
+
+            <!-- Campo Anti-robô (Honeypot) -->
+            <div style="display: none; visibility: hidden; opacity: 0;">
+                <input type="text" name="honeypot" id="honeypot" tabindex="-1">
+            </div>
+
+            <button type="submit" id="btnEnviar">Confirmar Agendamento</button>
+
+            <!-- AVISO DE SEGURANÇA -->
+            <div class="security-footer">
+                <div class="safe-badge">
+                    🔒 Seus dados estão 100% seguros
+                </div>
+                <p>Todas as informações são criptografadas e utilizadas exclusivamente para este agendamento,
+                    respeitando a Lei Geral de Proteção de Dados (LGPD).</p>
+                <div class="copyright">Uma Boa Visão Transforma Vidas Bariri - SP &copy; 2026</div>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- MODAL SUCESSO -->
+    <div id="modalSucesso" class="modal-overlay">
+        <div class="modal-content">
+            <div
+                style="background: var(--success); width: 80px; height: 80px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 20px;">
+                ✓</div>
+            <h2 style="color:#333; margin:0 0 10px 0;">Tudo Certo!</h2>
+            <p style="color:#666; margin-bottom: 25px; line-height: 1.5;">Cadastro realizado!<br>Sua vaga para
+                <strong>28/02/2026</strong> foi reservada.<br>Fique atento ao seu WhatsApp.</p>
+
+            <!-- Botão Agenda -->
+            <a id="btnAgenda" href="#" target="_blank"
+                style="display: block; margin: 0 auto 15px; text-decoration: none; color: var(--primary); font-weight: bold; border: 1px solid var(--primary); padding: 10px; border-radius: 8px; width: 100%;">
+                📅 Salvar na Agenda
+            </a>
+
+            <button onclick="window.location.reload()"
+                style="background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">Novo
+                Cadastro</button>
+        </div>
+    </div>
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>
