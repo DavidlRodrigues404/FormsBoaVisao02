@@ -387,6 +387,9 @@ button#btnEnviar:disabled {
     input, button {
         width: 100%;
     }
+    #nascimento {
+        width: 70%;
+    }
 }
 
 .modal-overlay {
@@ -426,3 +429,4 @@ button#btnEnviar:disabled {
     }
 
 }
+
