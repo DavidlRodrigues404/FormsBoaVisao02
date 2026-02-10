@@ -381,11 +381,11 @@ button#btnEnviar:disabled {
 @media (max-width: 500px) {
     .row {
         flex-direction: column;
-        gap: 0;
+        gap: 0.8rem;
     }
 
-    .container {
-        padding: 1.5rem;
+    input, button {
+        width: 100%;
     }
 }
 
@@ -424,4 +424,5 @@ button#btnEnviar:disabled {
         transform: scale(1);
         opacity: 1;
     }
+
 }
